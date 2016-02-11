@@ -25,32 +25,39 @@ import java.util.List;
 
 /**
  */
-@Deprecated
-public class SpatialDimensionSchema
+public class NewSpatialDimensionSchema extends DimensionSchema
 {
-  private final String dimName;
+  private static final String TYPENAME = "spatial";
+
   private final List<String> dims;
 
   @JsonCreator
-  public SpatialDimensionSchema(
-      @JsonProperty("dimName") String dimName,
+  public NewSpatialDimensionSchema(
+      @JsonProperty("name") String name,
       @JsonProperty("dims") List<String> dims
   )
   {
-    this.dimName = dimName;
+    super(name);
     this.dims = dims;
-  }
-
-  @JsonProperty
-  public String getDimName()
-  {
-    return dimName;
   }
 
   @JsonProperty
   public List<String> getDims()
   {
     return dims;
+  }
+
+  @Override
+  public String getTypeName()
+  {
+    return TYPENAME;
+  }
+
+  @Override
+  @JsonIgnore
+  public ValueType getValueType()
+  {
+    return ValueType.STRING;
   }
 
   @Override
@@ -63,11 +70,8 @@ public class SpatialDimensionSchema
       return false;
     }
 
-    SpatialDimensionSchema that = (SpatialDimensionSchema) o;
+    NewSpatialDimensionSchema that = (NewSpatialDimensionSchema) o;
 
-    if (!dimName.equals(that.dimName)) {
-      return false;
-    }
     return dims != null ? dims.equals(that.dims) : that.dims == null;
 
   }
@@ -75,8 +79,6 @@ public class SpatialDimensionSchema
   @Override
   public int hashCode()
   {
-    int result = dimName.hashCode();
-    result = 31 * result + (dims != null ? dims.hashCode() : 0);
-    return result;
+    return dims != null ? dims.hashCode() : 0;
   }
 }
